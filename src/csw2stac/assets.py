@@ -145,6 +145,7 @@ class AssetManager():
                 tree = ET.fromstring(response.content)
             except Exception as e:
                 logger.warning(f"failed to parse response to string with element tree {e}")
+                return None, None
             version = tree.attrib.get('version')
             
             # Find the bounding box
