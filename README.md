@@ -54,4 +54,5 @@ First setup configuration.  Location of CSW catalog, title of CSW, title of STAC
 ```
 You need credentials in 'data/creds/' to transfer your STAC to the s3 bucket (emods3.env) and ingest on resto (resto.env)
 
-python csw_to_stac.py
+cd src
+python main.py
