@@ -1,0 +1,18 @@
+/* Adjust the width of the source code block in the view-source box */
+div.highlight, pre, code {
+    width: 100% !important;  /* Set width to 100% */
+    max-width: none !important; /* Remove any max-width restriction */
+    white-space: pre-wrap; /* Allow the text to wrap */
+    overflow-x: auto;  /* Keep horizontal scrolling if necessary */
+}
+
+/* Adjust for a larger, more spacious layout */
+.body, .content {
+    max-width: 95% !important;  /* Adjust the content width for better readability */
+    margin: 0 auto;  /* Center the content */
+}
+
+/* Test: Change background color of the page */
+body {
+    background-color: lightgreen !important;
+}

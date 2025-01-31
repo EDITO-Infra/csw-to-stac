@@ -1,0 +1,13 @@
+/.venv
+*.json
+node_modules/
+__pycache__/
+.~lock.*
+target/
+unshared_data/
+data/
+logs/
+*.log
+*.csv
+*.dat
+html/
