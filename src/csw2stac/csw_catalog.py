@@ -8,6 +8,7 @@ import pandas as pd
 import ast
 import requests
 from datetime import datetime
+import time
 from typing import Any, Dict, List
 from xml.etree import ElementTree as ET
 
@@ -245,6 +246,11 @@ class CSWCatalogManager:
         while from_record <= total_records:
             url = f"https://emodnet.ec.europa.eu/geonetwork/srv/eng/q?_content_type=json&facet.q=sourceCatalog%2F{source_catalog}&resultType=details&from={from_record}&to={from_record + page_size - 1}"
             response = requests.get(url)
+            if response.status_code == 429:
+                logger.warning("Too many requests. Waiting for 30 seconds.")
+                time.sleep(30)
+                continue
+            response.raise_for_status()
             data = response.json()
 
             if from_record == 1:
@@ -265,7 +271,7 @@ class CSWCatalogManager:
             from_record += page_size
 
         return thematic_lot, uuids
-    
+
 
     def parse_bbox(self, bbox_elem) -> Dict[str, Any]:
         """Parse bounding box information."""

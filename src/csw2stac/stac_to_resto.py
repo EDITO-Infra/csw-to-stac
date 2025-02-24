@@ -151,17 +151,17 @@ class RestoStacManager:
 
     def post_collection(self, collection_data):
         post_url = f"https://api.{self.resto_instance}.edito.eu/data/collections/"
-        collection_data['links'] = self.cleanup_links(collection_data['links'], 'parent', f'https://api.{self.resto_instance}.edito.eu/data/collections/')
+        collection_data['links'] = self.cleanup_links(collection_data['links'], 'parent', f"https://api.{self.resto_instance}.edito.eu/data/collections/")
         return self.post_data(post_url, collection_data)
 
     def post_collection_to_child_catalog(self, collection_data, child_catalog):
         post_url = f"https://api.{self.resto_instance}.edito.eu/data/catalogs/{child_catalog}/"
-        collection_data['links'] = self.cleanup_links(collection_data['links'], 'parent', f'https://api.{self.resto_instance}.edito.eu/data/catalogs/{child_catalog}')
+        collection_data['links'] = self.cleanup_links(collection_data['links'], 'parent', f"https://api.{self.resto_instance}.edito.eu/data/catalogs/{child_catalog}")
         return self.post_data(post_url, collection_data)
     
     def post_item(self, item_data):
         post_url = f"https://api.{self.resto_instance}.edito.eu/data/collections/{item_data['collection']}/items/"
-        item_data['links'] = self.cleanup_links(item_data['links'], 'parent', f'https://api.{self.resto_instance}.edito.eu/data/collections/{item_data['collection']}/items/')
+        item_data['links'] = self.cleanup_links(item_data['links'], 'parent', f"https://api.{self.resto_instance}.edito.eu/data/collections/{item_data['collection']}/items/")
         return self.post_data(post_url, item_data)
 
     def cleanup_links(self, links, rel_to_replace, new_href):
@@ -187,7 +187,7 @@ class RestoStacManager:
                 self.get_initial_access_token()
                 return self.post_data(url, data, update)
             if update == False:
-                logger.info(f'update set to false for {url} {data['id']}')
+                logger.info(f"update set to false for {url} {data['id']}")
             return response.json()
         except Exception as e:
             logger.error(f"Failed to post data to {url}: {e}")

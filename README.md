@@ -8,17 +8,22 @@ The csw catalog can be built from other CSW catalogs.  But is primarily for tran
 
 ## Installation
 
+Install uv
+
+https://docs.astral.sh/uv/getting-started/installation/
+
+
 ### Requirements
 
-- Python 3.10
-- Credentials for the 'emodnet' bucket
+  Python >3.11, <3.12
 
 ### Install dependencies
 
-Install the required dependencies using pip:
+Use uv package manager.  The pyproject.toml file has the locked package version needed. 
 
 ```bash
-pip install -r requirements.txt
+uv venv install
+uv sync
 ```
 
 ### Scripts
@@ -54,5 +59,7 @@ First setup configuration.  Location of CSW catalog, title of CSW, title of STAC
 ```
 You need credentials in 'data/creds/' to transfer your STAC to the s3 bucket (emods3.env) and ingest on resto (resto.env)
 
+```bash
 cd src
-python main.py
+python3 main.py
+```
