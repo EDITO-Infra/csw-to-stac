@@ -45,6 +45,8 @@ utils.py: Various utility scripts
 
 First setup configuration.  Location of CSW catalog, title of CSW, title of STAC, local stac location, location for STAC on s3.  And if digesting on resto, which instance.
 
+in script csw_to_stac.py:
+
 ```json
 {
     "csw_catalog_title": "emodnetgeonetwork",
@@ -53,13 +55,13 @@ First setup configuration.  Location of CSW catalog, title of CSW, title of STAC
     "STAC_title": "EMODnet Geonetwork",
     "stac_dir": "../data/stac/",
     "stac_s3": "geonetwork_stac",
-    "resto_instance": "dive",
-    "records_to_process": ["bf0bc42474b39b859495d4e64af4028aa2f452c1"]
+    "resto_instance": "dive"
 }
 ```
 You need credentials in 'data/creds/' to transfer your STAC to the s3 bucket (emods3.env) and ingest on resto (resto.env)
 
 ```bash
+source .venv/bin/activate
 cd src
 python3 main.py
 ```
