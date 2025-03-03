@@ -11,3 +11,4 @@ logs/
 *.csv
 *.dat
 html/
+*.env

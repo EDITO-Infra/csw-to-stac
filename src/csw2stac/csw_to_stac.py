@@ -28,15 +28,15 @@ today = datetime.today().strftime('%Y-%m-%d')
 logger = Utils.get_logger(LOG_NAME='csw_to_stac')
 
 class CSWSTAConverter:
-    def __init__(self, config):
-        self.config = config
-        self.stac_dir = config['stac_dir']
+    def __init__(self, pipeline_config):
+        self.pipeline_config = pipeline_config
+        self.stac_dir = pipeline_config['stac_dir']
 
-        self.csw_catalog_title = config['csw_catalog_title']
+        self.csw_catalog_title = pipeline_config['csw_catalog_title']
 
-        self.cswcatalog = CSWCatalogManager(config)
-        self.cswstac = CSWSTACManager(config)
-        self.resto_stac_manager = RestoStacManager({'resto_instance': config['resto_instance']})
+        self.cswcatalog = CSWCatalogManager(pipeline_config)
+        self.cswstac = CSWSTACManager(pipeline_config)
+        self.resto_stac_manager = RestoStacManager({'resto_instance': pipeline_config['resto_instance']})
 
     def process_records(self, all_csw_records=None):
         with open(self.cswcatalog.json_output_path, 'r') as file:
@@ -57,7 +57,7 @@ class CSWSTAConverter:
         logger.info(f"\nProcessing {len(all_csw_records) - len(self.processed_records_df)} records")
         for id, metadata in all_csw_records.items():
 
-            if 'records_to_process' in self.config and self.config['records_to_process'] and id not in self.config['records_to_process']:
+            if 'records_to_process' in self.pipeline_config and self.pipeline_config['records_to_process'] and id not in self.pipeline_config['records_to_process']:
                 logger.info(f"Skipping record with id {id}")
                 continue
             if not self.processed_records_df.empty and id in self.processed_records_df['geonetwork_uri'].values:
@@ -109,7 +109,7 @@ class CSWSTAConverter:
 
     
     def sync_stac_catalog_to_s3(self):
-        stac_s3 = self.config['stac_s3']
+        stac_s3 = self.pipeline_config['stac_s3']
         S3Utils.sync_to_s3(self.stac_dir, stac_s3)
         logger.info("STAC catalog synced to S3")
     
@@ -184,7 +184,7 @@ class CSWSTAConverter:
 
 def csw2stac():
 
-    config = {
+    pipeline_config = {
         "csw_catalog_title" : "emodnetgeonetwork",
         "csw_catalog_url" : "https://www.emodnet.eu/geonetwork/srv/eng/csw",
         "stac_id": "emodnet_geonetwork",
@@ -196,10 +196,10 @@ def csw2stac():
 
     buildcsw = input("Do you want to build the CSW catalog? (y/n): ")
     if buildcsw == 'y':
-        cswcatalog = CSWCatalogManager(config)
+        cswcatalog = CSWCatalogManager(pipeline_config)
         cswcatalog.get_all_csw_records()
     if buildcsw == 'n':
-        cswcatalog = CSWCatalogManager(config)
+        cswcatalog = CSWCatalogManager(pipeline_config)
         cswcatalog.load_previous_records()
     
     removecp = input("Do you want to remove central portal entries from the CSW catalog? (y/n): ")
@@ -212,11 +212,11 @@ def csw2stac():
     processrecords = input("Do you want to process the records into STAC? (y/n): ")
 
     if processrecords == 'y':
-        csw_stac = CSWSTAConverter(config)
+        csw_stac = CSWSTAConverter(pipeline_config)
         csw_stac.process_records()
 
     
-    syncs3 = input(f"Do you want to sync the STAC {config['stac_dir']} catalog to S3? (y/n): ")
+    syncs3 = input(f"Do you want to sync the STAC {pipeline_config['stac_dir']} catalog to S3? (y/n): ")
 
     if syncs3 == 'y':
         csw_stac.sync_stac_catalog_to_s3()
