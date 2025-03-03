@@ -20,9 +20,9 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 class CSWCatalogManager:
-    def __init__(self, config, output_dir: str = "../../data"):
-        self.config = config
-        self.csw_title = config['csw_catalog_title']
+    def __init__(self, pipeline_config, output_dir: str = "../../data"):
+        self.pipeline_config = pipeline_config
+        self.csw_title = pipeline_config['csw_catalog_title']
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
         self.json_output_path = os.path.join(self.output_dir, f'all_{self.csw_title}_records.json')
@@ -52,14 +52,14 @@ class CSWCatalogManager:
 
     def collect_csw_records(self):
         """Collect records from CSW source."""
-        if self.config.get('csw_catalog_title') == 'emodnetgeonetwork':
+        if self.pipeline_config.get('csw_catalog_title') == 'emodnetgeonetwork':
             records = self.fetch_records_from_geonetwork_source_catalogs()
             logger.info(f"Records fetched from predefined source catalogs.")
             return records
         
-        elif self.config.get('csw_catalog_url'):
-            records = self.fetch_records_from_csw_url(self.config['csw_catalog_url'])
-            logger.info(f"Records fetched from CSW URL: {self.config['csw_catalog_url']}")
+        elif self.pipeline_config.get('csw_catalog_url'):
+            records = self.fetch_records_from_csw_url(self.pipeline_config['csw_catalog_url'])
+            logger.info(f"Records fetched from CSW URL: {self.pipeline_config['csw_catalog_url']}")
             return records
         else:
             logger.error("No valid CSW source provided.")

@@ -16,11 +16,11 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger("csw_to_stac")
 
 class CSWSTACManager():
-    def __init__(self, config):
+    def __init__(self, pipeline_config):
         self.final_structure = {}
         self.layer_count = 0
         self.layers = []
-        self.stac_root = f"{config['stac_dir']}/catalog.json"
+        self.stac_root = f"{pipeline_config['stac_dir']}/catalog.json"
         self.initialize_stac()
         self.stac_catalog = pystac.Catalog.from_file(self.stac_root)
 
